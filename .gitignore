@@ -1,0 +1,5 @@
+CMakeFiles/
+tmp/
+*.pyc
+configurations.json
+nn

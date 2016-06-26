@@ -1,3 +1,9 @@
+### Run 
+
+Use `main.py` to easily run the feature extraction in training mode. It will 
+instantiate the a `Driver` object in interactive mode and the required 
+parameters can be provided at run time.
+
 ### Feature extraction
 
 This repository includes python classes to extract a set of 7 features from 
