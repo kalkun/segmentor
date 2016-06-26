@@ -84,22 +84,20 @@ class FeatureExtraction:
                     size=len(ones), 
                     replace=False
                 )
-                ones = numpy.concatenate(
+                array = numpy.concatenate(
                     (ones, zeros[indices]), 
                     axis=0
                 )
-                array = ones
             if len(ones) > len(zeros):
                 indices = numpy.random.choice(
                     len(ones), 
                     size=len(zeros), 
                     replace=False
                 )
-                zeros = numpy.concatenate(
+                array = numpy.concatenate(
                     (zeros, ones[indices]), 
                     axis=0
                 )
-                array = zeros
         if not len(filename):
             if hasattr(self, "source"):
                 filename = "extracted_" + self.source

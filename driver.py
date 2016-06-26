@@ -65,21 +65,32 @@ class Driver:
         self.agree = ['y', "yes"]
         self.extract_balanced_notset = False
         self.override_params_notset  = False
-        ImagePath, LabelPath, DestinationFolder = self._getConfiguration()
-        self._setDestinationFolder(DestinationFolder)
+        ImagePath, LabelPath, DestinationFolder = self._getConfiguration(
+            ImagePath, 
+            LabelPath, 
+            DestinationFolder
+        )
+        if self.extract_balanced_notset:
+            self._setExtractBalanced()
         if self._runTrainOrTestMode(mode):
             self._setImagePath(ImagePath)
             self._setLabelPath(LabelPath)
         
         else:
             self._setImagePath(ImagePath)
+        self._setDestinationFolder(DestinationFolder)
 
     def _getConfiguration(self, 
         ImagePath=None, 
         LabelPath=None, 
         DestinationFolder=None):
-        with open(self.configfile, 'r') as f:
-            confs = json.load(f)
+        try:
+            with open(self.configfile, 'r') as f:
+                confs = json.load(f)
+        except FileNotFoundError:
+            self.extract_balanced_notset    = True
+            self.override_params_notset     = True
+            return [ImagePath, LabelPath, DestinationFolder]
 
         gsets = confs['generalSettings']
         if (gsets['ImagePath'] and not ImagePath):
@@ -143,6 +154,9 @@ class Driver:
             if (insist):
                 self._setLabelPath()
 
+    def _setExtractBalanced(self):
+        self.extract_balanced = input(text['type_ex_bal']) in self.agree
+
     def _getStoredMeanStd(self, confs, override=False):
         if override:
             confs["parameters"]["featureMeans"] = self.mean.tolist()
@@ -205,27 +219,44 @@ class Driver:
                 self.mean    = meanVectors.mean(axis=0)
                 self.std     = numpy.sqrt(varVectors.mean(axis=0))
 
-                with open(self.configfile, 'r') as f:
-                    confs = json.load(f)
-
-                if (confs["parameters"]["featureMeans"]):
-                    override = (self.override_params_notset or 
-                        self.override_params) 
-                    if self.override_params_notset: 
-                        if input(text["write_mean_std"]).lower() in self.agree:
-                            self.mean, self.std = self._getStoredMeanStd(
-                                confs, 
-                                True
-                            )
-                        else:
-                            self.mean, self.std = self._getStoredMeanStd(confs)
-                    elif self.override_params:
+                try:
+                    with open(self.configfile, 'r') as f:
+                        confs = json.load(f)
+                except FileNotFoundError:
+                    print("Creating configfile ", self.configfile)
+                    with open(self.configfile, "w+") as f:
+                        # make sure params are written, since the
+                        #  list is empty.
+                        self.override_params_notset = False
+                        self.override_params = True
+                        self._setExtractBalanced()
+                        confs = {
+                                "generalSettings": {
+                                    "DestinationFolder": "",
+                                    "ImagePath": "",
+                                    "LabelPath": ""                                },
+                                "parameters": {
+                                    "featureMeans": [
+                                    ],
+                                    "featureStd": [
+                                    ]
+                                }
+                            }                    
+                if self.override_params_notset: 
+                    if input(text["write_mean_std"]).lower() in self.agree:
                         self.mean, self.std = self._getStoredMeanStd(
                             confs, 
                             True
                         )
-                    else: 
+                    else:
                         self.mean, self.std = self._getStoredMeanStd(confs)
+                elif self.override_params:
+                    self.mean, self.std = self._getStoredMeanStd(
+                        confs, 
+                        True
+                    )
+                else: 
+                    self.mean, self.std = self._getStoredMeanStd(confs)
 
                 ## Normalize data with mean of all training image features
                 ## and write features to csv files 

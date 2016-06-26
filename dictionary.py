@@ -13,5 +13,6 @@ text = {
     "disp_image_dir"        : "Using image directory\t",
     "disp_dest_dir"         : "Saving to directory\t",
     "disp_conf_file"        : "Configuration file\t",
-    "run_mode"              : "\nPreprocessing in `{0}` mode\r\n"
+    "run_mode"              : "\nPreprocessing in `{0}` mode\r\n",
+    "type_ex_bal"           : "Do you want to extract features as a balanced feature set? [y/N]"
 }
