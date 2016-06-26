@@ -59,3 +59,53 @@ Example:
 
 The visualization will show each feature at a time using the image debugger in the 
 Python Image Library (PIL).
+
+### Preconfigurations
+
+To preconfigure the input to the Driver class, a `configurations.json` can be used. 
+It has the following format:
+
+```
+{
+    "generalSettings": {
+        "DestinationFolder": "./features",
+        "ImagePath": "./STARE",
+        "LabelPath": "./labels",
+        "extract_balanced": false,
+        "override_params": true
+    },
+    "parameters": {
+        "featureMeans": [
+            9.55860709190124,
+            8.383207004324243,
+            -0.016580067798572018,
+            4.795640306869291,
+            147.52288315138432,
+            2.778818816145008,
+            7.241800345905508
+        ],
+        "featureStd": [
+            11.13983602214089,
+            10.68084747300321,
+            3.528459958094444,
+            5.071280187477676,
+            26.6519371231476,
+            1.2742274005193075,
+            3.070712498583245
+        ]
+    }
+}
+```
+
+The first three parameters in `generalSettings` are the same as would have
+otherwise been provided to the instantiation of the `Driver` object.
+
+If `extract_balanced` is set to `true` a balanced training set will be extracted.
+
+The `parameters` are used by the `Driver` class itself to store the feature by
+feature mean and standard deviation, so that normalization can be done with
+the same parameters.
+
+These are read from when running *testing* mode. To prevent the parameters
+to be overwritten in *training* mode, the `override_params` in `generalSettings`
+can be set to `false`.
