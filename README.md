@@ -1,15 +1,3 @@
-### Run 
-
-Use `main.py` to easily run the feature extraction in training mode. It will 
-instantiate the a `Driver` object in interactive mode and the required 
-parameters can be provided at run time.
-
-```
-    python3 main.py
-```
-
-Just edit `main.py` to run the driver in *testing* mode.
-
 ### Feature extraction
 
 This repository includes python classes to extract a set of 7 features from 
@@ -40,6 +28,32 @@ So to extract a training set from images in folder named *STARE/* using labels i
 
 
 The features can be used with any classifier by importing the resulting `.csv` files.
+
+### Run 
+
+Use `main.py` to easily run the feature extraction in training mode. It will 
+instantiate the a `Driver` object in interactive mode and the required 
+parameters can be provided at run time.
+
+```
+    python3 main.py
+```
+
+Just edit `main.py` to run the driver in *testing* mode.
+
+### Dependencies 
+
+Requirements are 
+
+* [SciPy](https://www.scipy.org/install.html)
+* [NumPy](http://docs.scipy.org/doc/numpy/user/install.html)
+* [SkImage](http://scikit-image.org/docs/dev/install.html)
+* [OpenCV](http://docs.opencv.org/2.4/index.html)
+    * [OpenCV for Linux](http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html?highlight=install)
+    * [OpenCV for iOS](http://docs.opencv.org/2.4/doc/tutorials/introduction/ios_install/ios_install.html?highlight=install)
+    * [OpenCV for Windows](http://docs.opencv.org/2.4/doc/tutorials/introduction/windows_install/windows_install.html?highlight=install)
+* [Pillow](http://pillow.readthedocs.io/en/3.1.x/installation.html)
+* [MatPlotLib](http://matplotlib.org/users/installing.html)
 
 ### Visualizing predictions
 A **predictedImage.py** provides a way of visualizing the predicted images on top of 
