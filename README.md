@@ -1,29 +1,21 @@
 ### Feature extraction
 
-This repository includes python classes to extract a set of 7 features from 
-retinal images and save them as `.csv` files, as described in Marin et al. (2011). 
+This repository includes python classes to extract a set of 7 features from retinal images and save them as `.csv` files, as described in Marin et al. (2011). 
 
-The feature extraction can be done for each retinal image in a folder via the 
-`Driver` class in **driver.py**.
-The path to the images can be given by the `ImagePath` parameter. For extracting 
-a training set, the path to label or groundtruth images can be given `LabelPath` 
-parameter. The path to a folder where the extracted features are saved to as 
-`.csv` files is given by `DestinationFolder`. 
+The feature extraction can be done for each retinal image in a folder via the `Driver` class in **driver.py**. The path to the images can be given by the `ImagePath` parameter. For extracting a training set, the path to label or groundtruth images can be given through a `LabelPath` parameter. The path to a folder where the extracted features are saved to as `.csv` files is given by `DestinationFolder`. 
 
-A `mode` parameter can be set to `"training"` or `"testing"` to indicate whether
-a training or test set is wanted.
+A `mode` parameter can be set to `"training"` or `"testing"` to indicate whether a training or test set is wanted.
 
-So to extract a training set from images in folder named *STARE/* using labels in 
-*labels/* and saving the features to *features/* the following could be issued:
+So to extract a training set from images in a folder named *STARE/* using labels in *labels/* and saving the features to *features/* the following could be issued:
 
-```
-    from driver import Driver
-    driverObj = Driver(
-                    ImagePath           =   "./STARE/", 
-                    LabelPath           =   "./labels/",
-                    DestinationFolder   =   "./features/",
-                    mode                =   "training"
-                )
+```python
+from driver import Driver
+driverObj = Driver(
+    ImagePath           =   "./STARE/", 
+    LabelPath           =   "./labels/",
+    DestinationFolder   =   "./features/",
+    mode                =   "training"
+)
 ```
 
 
@@ -31,12 +23,10 @@ The features can be used with any classifier by importing the resulting `.csv` f
 
 ### Run 
 
-Use `main.py` to easily run the feature extraction in training mode. It will 
-instantiate the a `Driver` object in interactive mode and the required 
-parameters can be provided at run time.
+Use `main.py` to easily run the feature extraction in training mode. It will instantiate the a `Driver` object in interactive mode and the required parameters can be provided at run time.
 
-```
-    python3 main.py
+```python
+python3 main.py
 ```
 
 Just edit `main.py` to run the driver in *testing* mode.
@@ -56,20 +46,16 @@ Requirements are
 * [MatPlotLib](http://matplotlib.org/users/installing.html)
 
 ### Visualizing predictions
-A **predictedImage.py** provides a way of visualizing the predicted images on top of 
-the original image or the groundtruth image. 
+A **predictedImage.py** provides a way of visualizing the predicted images on top of the original image or the groundtruth image. 
 
-Assuming the predictions are available as a flat python list called data, the following
-could be used to make such images:
-```
-    from predictedImage import PredictedImage
-    predImg = PredictedImage(data)
-    predImg.showOverlay(labelImage="./labels/someImage.ppm").save(path="./predictedImage.png")
+Assuming the predictions are available as a flat python list called data, the following could be used to make such images:
+```python
+from predictedImage import PredictedImage
+predImg = PredictedImage(data)
+predImg.showOverlay(labelImage="./labels/someImage.ppm").save(path="./predictedImage.png")
 ```
 
-Notice that `PredictedImage` assumes that the flat data array represents predictions for 
-each pixel in an image with a 700x605 format, which is used by the images in the STARE
-database. 
+Notice that `PredictedImage` assumes that the flat data array represents predictions for each pixel in an image with a 700x605 format, which is used by the images in the STARE database. 
 
 ### Debug features
 
@@ -78,20 +64,19 @@ in **visualizeFeatures.py**.
 
 Example:
 
-```
-    from visualizeFeatures import VisualizeFeatures
-    visFeat = VisualizeFeatures(csvPath="./someFeatures.csv")
+```python
+from visualizeFeatures import VisualizeFeatures
+visFeat = VisualizeFeatures(csvPath="./someFeatures.csv")
 ```
 
-The visualization will show each feature at a time using the image debugger in the 
-Python Image Library (PIL).
+The visualization will show each feature at a time using the image debugger in the Python Image Library (PIL).
 
 ### Preconfigurations
 
 To preconfigure the input to the Driver class, a `configurations.json` can be used. 
 It has the following format:
 
-```
+```json
 {
     "generalSettings": {
         "DestinationFolder": "./features",
@@ -123,15 +108,10 @@ It has the following format:
 }
 ```
 
-The first three parameters in `generalSettings` are the same as would have
-otherwise been provided to the instantiation of the `Driver` object.
+The first three parameters in `generalSettings` are the same as would have otherwise been provided to the instantiation of the `Driver` object.
 
 If `extract_balanced` is set to `true` a balanced training set will be extracted.
 
-The `parameters` are used by the `Driver` class itself to store the feature by
-feature mean and standard deviation, so that normalization can be done with
-the same parameters.
+The `parameters` are used by the `Driver` class itself to store the feature by feature mean and standard deviation, so that normalization can be done with the same parameters.
 
-These are read from when running *testing* mode. To prevent the parameters
-to be overwritten in *training* mode, the `override_params` in `generalSettings`
-can be set to `false`.
+These are read from when running *testing* mode. To prevent the parameters to be overwritten in *training* mode, the `override_params` in `generalSettings` can be set to `false`.
