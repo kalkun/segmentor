@@ -1,0 +1,15 @@
+{
+    "generalSettings": {
+        "DestinationFolder": "",
+        "ImagePath": "",
+        "LabelPath": "",
+        "extract_balanced": false,
+        "override_params": true
+    },
+    "parameters": {
+        "featureMeans": [
+        ],
+        "featureStd": [
+        ]
+    }
+}
